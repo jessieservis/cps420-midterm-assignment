@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 from sqlalchemy import func
 from models import Item, Claim
-from schemas import ItemIn, ClaimIn
+from schemas import ItemIn, ClaimIn, ItemStats
 
 
 # ✅ PROVIDED
@@ -61,6 +61,18 @@ def delete_item(db: Session, item_id: int) -> bool:
     return True
 
 
+# Add delete_claim so the delete claim function works
+def delete_claim(db: Session, item_id: int, claim_id: int) -> bool:
+    db_claim = (
+        db.query(Claim).filter(Claim.item_id == item_id, Claim.id == claim_id).first()
+    )
+    if db_claim is None:
+        return False
+    db.delete(db_claim)
+    db.commit()
+    return True
+
+
 # TODO #4 — Implement create_claim()
 # Hints:
 #   - Build a Claim ORM object using claim_in.model_dump(), set item_id
@@ -77,7 +89,8 @@ def create_claim(db: Session, item_id: int, claim_in: ClaimIn) -> Claim:
 # Hints:
 #   - Query Item where Item.resolved == False
 #   - Apply skip and limit, return the list
-def get_unresolved_items(db: Session, skip: int = 0, limit: int = 10) -> list[Item]: ...
+def get_unresolved_items(db: Session, skip: int = 0, limit: int = 10) -> list[Item]:
+    return db.query(Item).filter(Item.resolved == False).offset(skip).limit(limit).all()
 
 
 # TODO #6 — Implement get_item_stats()
@@ -87,4 +100,22 @@ def get_unresolved_items(db: Session, skip: int = 0, limit: int = 10) -> list[It
 #     for total_claims
 #   - Add a second filter for Claim.approved == True to count approved claims
 #   - Return an ItemStats object built manually (not an ORM object)
-def get_item_stats(db: Session, item_id: int): ...
+def get_item_stats(db: Session, item_id: int):
+    db_item = get_one_item(db, item_id)
+    if db_item is None:
+        return None
+    total_claims = (
+        db.query(func.count(Claim.id)).filter(Claim.item_id == item_id).scalar()
+    )
+    total_approved_claims = (
+        db.query(func.count(Claim.id))
+        .filter(Claim.item_id == item_id, Claim.approved == True)
+        .scalar()
+    )
+    return ItemStats(
+        item_id=db_item.id,
+        name=db_item.name,
+        total_claims=total_claims,
+        approved=total_approved_claims,
+        resolved=db_item.resolved,
+    )

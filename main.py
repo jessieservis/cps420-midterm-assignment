@@ -28,6 +28,20 @@ async def get_items(
     return items
 
 
+# TODO #10 — Implement GET /item/unresolved
+# Requirements:
+#   - Call crud.get_unresolved_items() with skip and limit params
+#   - Return the list of unresolved items
+#   - IMPORTANT: This route must be defined BEFORE /item/{item_id}
+#     in the final file — move it above get_item() when submitting
+@app.get("/item/unresolved", response_model=list[ItemOut])
+async def get_unresolved_items(db: DB, skip: int = 0, limit: int = 10):
+    items = crud.get_unresolved_items(db, skip, limit)
+    if not items:
+        raise HTTPException(status_code=404, detail="Unresolved items not found")
+    return items
+
+
 # ✅ PROVIDED — Get one item by ID
 @app.get("/item/{item_id}", response_model=ItemOut)
 async def get_item(item_id: int, db: DB):
@@ -63,7 +77,7 @@ async def create_item(item_in: ItemIn, db: DB):
 #   - Return the updated ItemOut
 @app.put("/item/{item_id}", response_model=ItemOut)
 async def update_item(item_id: int, item_in: ItemIn, db: DB):
-    updated = crud.update_item(db, item_in, item_id)
+    updated = crud.update_item(db, item_id, item_in)
     if updated is None:
         raise HTTPException(status_code=404, detail="Item not found")
     return updated
@@ -79,16 +93,6 @@ async def delete_item(item_id: int, db: DB):
     if deleted is None:
         raise HTTPException(status_code=404, detail="Item not found")
     return deleted
-
-
-# TODO #10 — Implement GET /item/unresolved
-# Requirements:
-#   - Call crud.get_unresolved_items() with skip and limit params
-#   - Return the list of unresolved items
-#   - IMPORTANT: This route must be defined BEFORE /item/{item_id}
-#     in the final file — move it above get_item() when submitting
-@app.get("/item/unresolved", response_model=list[ItemOut])
-async def get_unresolved_items(db: DB, skip: int = 0, limit: int = 10): ...
 
 
 # ✅ PROVIDED — Get stats for one item
