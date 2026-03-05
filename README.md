@@ -1,5 +1,7 @@
 # CPS420 - Mid-Term Programming Assignment
 
+Completed by Jessica Servis (servi1jm)
+
 ## FastAPI Chapters 1–9: Campus Lost & Found API with SQLite & SQLAlchemy
 
 You will complete a **Campus Lost & Found REST API** that allows students to report lost items and submit claim requests in a **SQLite database** via **SQLAlchemy ORM**. The database setup, models, and some routes are already provided — your job is to fill in the missing logic marked with `# TODO`.
@@ -19,16 +21,19 @@ lostandfound_api/
 ### Getting Started
 
 1. **Install dependencies:**
+
 ```bash
 pip install fastapi uvicorn sqlalchemy
 ```
 
 2. **Run the server:**
+
 ```bash
 uvicorn main:app --reload
 ```
 
 3. **Visit the interactive API docs:**
+
 ```
 http://127.0.0.1:8000/docs
 ```
@@ -39,18 +44,18 @@ All provided routes work immediately, so you can confirm your database is set up
 
 Complete the 10 TODOs marked in `crud.py` and `main.py`. Each TODO is worth 10 points (100 total).
 
-| # | Location | What to Implement | Points |
-| :-- | :-- | :-- | :-- |
-| TODO #1 | `crud.py` | `create_item()` | 10 |
-| TODO #2 | `crud.py` | `update_item()` | 10 |
-| TODO #3 | `crud.py` | `delete_item()` (with cascade) | 10 |
-| TODO #4 | `crud.py` | `create_claim()` | 10 |
-| TODO #5 | `crud.py` | `get_unresolved_items()` — filtered query | 10 |
-| TODO #6 | `crud.py` | `get_item_stats()` — aggregate query | 10 |
-| TODO #7 | `main.py` | `POST /item` route | 10 |
-| TODO #8 | `main.py` | `PUT /item/{item_id}` route | 10 |
-| TODO #9 | `main.py` | `DELETE /item/{item_id}` route | 10 |
-| TODO #10 | `main.py` | `GET /item/unresolved` route | 10 |
+| #        | Location  | What to Implement                         | Points |
+| :------- | :-------- | :---------------------------------------- | :----- |
+| TODO #1  | `crud.py` | `create_item()`                           | 10     |
+| TODO #2  | `crud.py` | `update_item()`                           | 10     |
+| TODO #3  | `crud.py` | `delete_item()` (with cascade)            | 10     |
+| TODO #4  | `crud.py` | `create_claim()`                          | 10     |
+| TODO #5  | `crud.py` | `get_unresolved_items()` — filtered query | 10     |
+| TODO #6  | `crud.py` | `get_item_stats()` — aggregate query      | 10     |
+| TODO #7  | `main.py` | `POST /item` route                        | 10     |
+| TODO #8  | `main.py` | `PUT /item/{item_id}` route               | 10     |
+| TODO #9  | `main.py` | `DELETE /item/{item_id}` route            | 10     |
+| TODO #10 | `main.py` | `GET /item/unresolved` route              | 10     |
 
 ### Tips
 
@@ -61,6 +66,7 @@ Complete the 10 TODOs marked in `crud.py` and `main.py`. Each TODO is worth 10 p
 ### Grading
 
 Your solution will be graded based on:
+
 - Correct implementation of all 10 TODOs
 - Proper error handling and HTTP status codes
 - Adherence to the provided hints and best practices
